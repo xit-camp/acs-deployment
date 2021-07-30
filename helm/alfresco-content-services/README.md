@@ -17,8 +17,8 @@ A Helm chart for deploying Alfresco Content Services
 |  | activemq | 2.0.0 |
 |  | alfresco-search | 1.0.4 |
 |  | alfresco-sync-service | 3.0.8 |
-| https://activiti.github.io/activiti-cloud-helm-charts | alfresco-digital-workspace(common) | 7.1.0-M12 |
-| https://activiti.github.io/activiti-cloud-helm-charts | alfresco-admin-app(common) | 7.1.0-M12 |
+| https://activiti.github.io/activiti-cloud-helm-charts | alfresco-digital-workspace(common) | 7.1.0-M14 |
+| https://activiti.github.io/activiti-cloud-helm-charts | alfresco-admin-app(common) | 7.1.0-M14 |
 | https://charts.bitnami.com/bitnami | postgresql-syncservice(postgresql) | 8.9.6 |
 | https://charts.bitnami.com/bitnami | postgresql | 8.9.6 |
 
@@ -62,7 +62,7 @@ Hence, setting up explicit Container memory and then assigning a percentage of i
 | alfresco-admin-app.env.APP_CONFIG_AUTH_TYPE | string | `"BASIC"` |  |
 | alfresco-admin-app.image.pullPolicy | string | `"Always"` |  |
 | alfresco-admin-app.image.repository | string | `"quay.io/alfresco/alfresco-admin-app"` |  |
-| alfresco-admin-app.image.tag | string | `"develop-12457"` |  |
+| alfresco-admin-app.image.tag | string | `"develop-13617"` |  |
 | alfresco-admin-app.ingress.annotations."kubernetes.io/ingress.class" | string | `"nginx"` |  |
 | alfresco-admin-app.ingress.annotations."nginx.ingress.kubernetes.io/cors-allow-headers" | string | `"Authorization, Content-Type, Accept"` |  |
 | alfresco-admin-app.ingress.annotations."nginx.ingress.kubernetes.io/enable-cors" | string | `"true"` |  |
