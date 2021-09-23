@@ -1,4 +1,4 @@
-# Defines the properties required by the Alfresco Search (Solr) App
+# Defines the properties required by the Alfresco Reindexing Worker App
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -9,6 +9,7 @@ metadata:
     chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
     component: search
 data:
+  ALFRESCO_REINDEX_PARTITIONING_TYPE: "manager"
   ELASTICSEARCH_INDEXNAME: "{{ .Values.indexName }}"
   SPRING_ELASTICSEARCH_REST_URIS: http://elasticsearch-master:9200
   SPRING_ACTIVEMQ_BROKERURL: nio://{{ .Release.Name }}-activemq-broker:61616
