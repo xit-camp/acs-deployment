@@ -1,0 +1,58 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "alfresco-elasticsearch-connector.fullname" . }}-reindexing
+spec:
+  replicas: {{ .Values.reindexingWorker.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      {{- if .Values.global.alfrescoRegistryPullSecrets }}
+      # only set this secret if a private docker registry variable is defined
+      imagePullSecrets:
+        - name: {{ .Values.global.alfrescoRegistryPullSecrets }}
+      {{- end }}
+      containers:
+        - name: {{ .Chart.Name }}-reindexing
+          image: "{{ .Values.image.repositoryPrefix }}-reindexing:{{ .Values.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: SERVER_PORT
+              value: "8080"
+            - name: ALFRESCO_REINDEX_PARTITIONING_TYPE
+              value: "master"
+            - name: SPRING_DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "content-services.shortname" . }}-dbsecret
+                  key: DATABASE_PASSWORD
+            - name: SPRING_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "content-services.shortname" . }}-dbsecret
+                  key: DATABASE_USERNAME
+          envFrom:
+            - configMapRef:
+                name: {{ template "alfresco-elasticsearch-connector.fullName" . }}-elasticsearch-connector-reindexing-configmap
+          ports:
+              - name: http
+                containerPort: 8080
+                protocol: TCP
+          livenessProbe:
+            initialDelaySeconds: 300
+            timeoutSeconds: 60
+            httpGet:
+              path: /actuator/health
+              port: http
+          readinessProbe:
+            initialDelaySeconds: 60
+            timeoutSeconds: 60
+            httpGet:
+              path: /actuator/health
+              port: http

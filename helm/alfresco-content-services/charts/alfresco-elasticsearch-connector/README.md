@@ -48,6 +48,7 @@ A Helm chart for deploying Alfresco Elasticsearch connector
 | reindexing.postgresql.database | string | `"alfresco"` |  |
 | reindexing.postgresql.name | string | `"postgresql-acs"` |  |
 | reindexing.postgresql.port | int | `5432` |  |
+| reindexingWorker | object | `{}` |  |
 | replicaCount | int | `1` |  |
 | repository | object | `{}` | The parent chart will set the values for "repository.host" and "repository.port" |
 | resources | object | `{}` |  |
