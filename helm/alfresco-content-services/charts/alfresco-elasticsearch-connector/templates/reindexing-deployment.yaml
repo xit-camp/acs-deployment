@@ -26,13 +26,23 @@ spec:
             - name: SERVER_PORT
               value: "8080"
             - name: ALFRESCO_REINDEX_PARTITIONING_TYPE
-              value: "master"
+              value: "manager"
             - name: SPRING_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ template "content-services.shortname" . }}-dbsecret
                   key: DATABASE_PASSWORD
             - name: SPRING_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "content-services.shortname" . }}-dbsecret
+                  key: DATABASE_USERNAME
+            - name: SPRING_BATCH_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "content-services.shortname" . }}-dbsecret
+                  key: DATABASE_PASSWORD
+            - name: SPRING_BATCH_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ template "content-services.shortname" . }}-dbsecret

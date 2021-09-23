@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: {{ include "alfresco-elasticsearch-connector.fullname" . }}-reindexing-worker
 spec:
-  replicas: {{ .Values.reindexingWorker.replicaCount | default 1 }}
+  replicas: 1
   selector:
     matchLabels:
       app: backend
@@ -35,6 +35,16 @@ spec:
                   name: {{ template "content-services.shortname" . }}-dbsecret
                   key: DATABASE_PASSWORD
             - name: SPRING_DATABASE_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "content-services.shortname" . }}-dbsecret
+                  key: DATABASE_USERNAME
+            - name: SPRING_BATCH_DATASOURCE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ template "content-services.shortname" . }}-dbsecret
+                  key: DATABASE_PASSWORD
+            - name: SPRING_BATCH_DATASOURCE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: {{ template "content-services.shortname" . }}-dbsecret

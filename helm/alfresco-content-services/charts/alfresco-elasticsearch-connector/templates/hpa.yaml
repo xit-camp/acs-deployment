@@ -1,5 +1,5 @@
 ---
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
   name: reindexing-worker-hpa
@@ -13,5 +13,23 @@ spec:
   metrics:
     - type: Pods
       pods:
-        metricName: messages
-        targetAverageValue: 10
+        metric:
+          name: messages
+        target:
+          averageValue: "1"
+          type: AverageValue
+  behavior:
+    scaleDown:
+      policies:
+        - type: Pods
+          value: 4
+          periodSeconds: 60
+      selectPolicy: Min
+      stabilizationWindowSeconds: 300
+    scaleUp:
+      policies:
+        - type: Pods
+          value: 5
+          periodSeconds: 5
+      selectPolicy: Max
+      stabilizationWindowSeconds: 0
