@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "alfresco-elasticsearch-connector.fullname" . }}-reindexing-worker
+  name: esc-reindexing-worker
 spec:
   replicas: 1
   selector:
@@ -63,7 +63,7 @@ spec:
               path: /actuator/health
               port: http
           readinessProbe:
-            initialDelaySeconds: 60
+            initialDelaySeconds: 15
             timeoutSeconds: 60
             httpGet:
               path: /actuator/health

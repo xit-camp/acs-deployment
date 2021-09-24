@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "alfresco-elasticsearch-connector.fullname" . }}-reindexing
+  name: esc-reindexing-master
 spec:
   replicas: {{ .Values.reindexingWorker.replicaCount | default 1 }}
   selector:
