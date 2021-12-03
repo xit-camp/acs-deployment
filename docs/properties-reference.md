@@ -1503,6 +1503,7 @@ used in deprecated classes that have been superseded by newer functionality.
 | dir.root | Root folder path | ./alf_data |
 | domain.name.caseSensitive | Are domain names case sensitive? | false |
 | domain.separator | | |
+| download.archiveCheckLimit | Maximum number of items to check for archive status when creating downloads node set to -1 for unlimited checks. Only used if azure-connector or s3-connector is installed | 500 |
 | download.cleaner.batchSize | Download Service Cleanup. -1 or 0 for not using batches | 1000 |
 | download.cleaner.cleanAllSysDownloadFolders | You could set this to false for new installations greater then ACS 6.2 see MNT-20212 | true |
 | download.cleaner.maxAgeMins | Download Service Cleanup | 60 |
