@@ -1,0 +1,31 @@
+{
+  "renditions": [
+    {
+      "renditionName": "aiBusinessCustom",
+      "targetMediaType": "application/vnd.alfresco.ai.features.v1+json",
+      "options": [
+        {"name": "endpointAwsComprehendEntityRecognizer", "value": "placeholder"},
+        {"name": "maxResults", "value": 1000},
+        {"name": "minConfidence", "value": 0.8}
+      ]
+    },
+    {
+      "renditionName": "aiSportCustom",
+      "targetMediaType": "application/vnd.alfresco.ai.features.v1+json",
+      "options": [
+        {"name": "endpointAwsComprehendEntityRecognizer", "value": "placeholder"},
+        {"name": "maxResults", "value": 1000},
+        {"name": "minConfidence", "value": 0.8}
+      ]
+    },
+    {
+      "renditionName": "aiClassification",
+      "targetMediaType": "application/vnd.alfresco.ai.classifiers.v1+json",
+      "options": [
+        {"name": "endpointAwsComprehendClassifier", "value": "placeholder"},
+        {"name": "maxResults", "value": 1000},
+        {"name": "minConfidence", "value": 0.2}
+      ]
+    }
+  ]
+}

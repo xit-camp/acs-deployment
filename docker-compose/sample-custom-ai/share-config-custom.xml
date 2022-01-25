@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alfresco-config>
+    <config evaluator="string-compare" condition="DocumentLibrary">
+        <!-- Aspects that a user can see -->
+        <aspects>
+            <visible>
+                <aspect name="acme:businesses"/>
+                <aspect name="acme:sports"/>
+                <aspect name="acme:categories"/>
+                <aspect name="acme:sampleApplicationForSchengenVisa"/>
+            </visible>
+        </aspects>
+    </config>
+
+</alfresco-config>

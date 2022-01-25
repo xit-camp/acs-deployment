@@ -1,0 +1,140 @@
+{
+    "transformers": [
+        {
+            "transformerName": "officeToImageViaAsposeWordsToPdf",
+            "transformerPipeline" : [
+                {"transformerName": "AsposeWordsToPdf", "targetMediaType": "application/pdf"},
+                {"transformerName": "pdfToImageViaPng"}
+            ],
+            "supportedSourceAndTargetList": [
+            ],
+            "transformOptions": [
+                "asposeOptions",
+                "pdfRendererOptions",
+                "imageMagickOptions"
+            ]
+        },
+        {
+            "transformerName": "officeToImageViaAsposeCellsToPdf",
+            "transformerPipeline" : [
+                {"transformerName": "AsposeCellsToPdf", "targetMediaType": "application/pdf"},
+                {"transformerName": "pdfToImageViaPng"}
+            ],
+            "supportedSourceAndTargetList": [
+            ],
+            "transformOptions": [
+                "asposeOptions",
+                "pdfRendererOptions",
+                "imageMagickOptions"
+            ]
+        },
+        {
+            "transformerName": "officeToImageViaAsposeSlidesToPdf",
+            "transformerPipeline" : [
+                {"transformerName": "AsposeSlidesToPdf", "targetMediaType": "application/pdf"},
+                {"transformerName": "pdfToImageViaPng"}
+            ],
+            "supportedSourceAndTargetList": [
+            ],
+            "transformOptions": [
+                "asposeOptions",
+                "pdfRendererOptions",
+                "imageMagickOptions"
+            ]
+        },
+        {
+            "transformerName": "textToImageViaAsposeWordsToPdf",
+            "transformerPipeline" : [
+              {"transformerName": "AsposeWordsToPdf",                  "targetMediaType": "application/pdf"},
+              {"transformerName": "pdfToImageViaPng"}
+            ],
+            "supportedSourceAndTargetList": [
+              {"sourceMediaType": "text/plain",  "priority": 45,  "targetMediaType": "image/gif" },
+              {"sourceMediaType": "text/plain",  "priority": 45,  "targetMediaType": "image/jpeg"},
+              {"sourceMediaType": "text/plain",  "priority": 45,  "targetMediaType": "image/tiff"},
+              {"sourceMediaType": "text/plain",  "priority": 45,  "targetMediaType": "image/png" }
+            ],
+            "transformOptions": [
+                "asposeOptions",
+                "pdfRendererOptions",
+                "imageMagickOptions"
+            ]
+        },
+        {
+            "transformerName": "textToImageViaAsposeCellsToPdf",
+            "transformerPipeline" : [
+              {"transformerName": "AsposeCellsToPdf",                  "targetMediaType": "application/pdf"},
+              {"transformerName": "pdfToImageViaPng"}
+            ],
+            "supportedSourceAndTargetList": [
+              {"sourceMediaType": "text/csv",  "priority": 45,  "targetMediaType": "image/gif" },
+              {"sourceMediaType": "text/csv",  "priority": 45,  "targetMediaType": "image/jpeg"},
+              {"sourceMediaType": "text/csv",  "priority": 45,  "targetMediaType": "image/tiff"},
+              {"sourceMediaType": "text/csv",  "priority": 45,  "targetMediaType": "image/png" }
+            ],
+            "transformOptions": [
+                "asposeOptions",
+                "pdfRendererOptions",
+                "imageMagickOptions"
+            ]
+        },
+        {
+            "transformerName": "archiveToAsposePdfViaText",
+            "transformerPipeline" : [
+                {"transformerName": "Archive",                                        "targetMediaType": "text/plain"},
+                {"transformerName": "AsposeWordsToPdf"}
+            ],
+            "supportedSourceAndTargetList": [
+                {"sourceMediaType": "application/x-cpio",            "priority": 45,  "targetMediaType": "application/pdf" },
+                {"sourceMediaType": "application/java-archive",      "priority": 45,  "targetMediaType": "application/pdf"},
+                {"sourceMediaType": "application/x-tar",             "priority": 45,  "targetMediaType": "application/pdf" },
+                {"sourceMediaType": "application/zip",               "priority": 45,  "targetMediaType": "application/pdf" }
+            ],
+            "transformOptions": [
+                "archiveOptions",
+                "asposeOptions"
+            ]
+        },
+        {
+            "transformerName": "outlookMsg2AsposePdf",
+            "transformerPipeline" : [
+                {"transformerName": "OutlookMsg",                                   "targetMediaType": "text/plain"},
+                {"transformerName": "AsposeWordsToPdf"}
+            ],
+            "supportedSourceAndTargetList": [
+                {"sourceMediaType": "application/vnd.ms-outlook",  "priority": 45,  "targetMediaType": "application/pdf" }
+            ],
+            "transformOptions": [
+                "tikaOptions",
+                "asposeOptions"
+            ]
+        },
+        {
+            "transformerName": "rfc822ToAsposePdf",
+            "transformerPipeline" : [
+                {"transformerName": "rfc822",                         "targetMediaType": "text/plain"},
+                {"transformerName": "AsposeWordsToPdf"}
+            ],
+            "supportedSourceAndTargetList": [
+                {"sourceMediaType": "message/rfc822", "priority": 45, "targetMediaType": "application/pdf" }
+            ],
+            "transformOptions": [
+                "asposeOptions"
+            ]
+        },
+        {
+            "transformerName": "htmlToAsposePdfViaTXT",
+            "transformerPipeline" : [
+                {"transformerName": "string", "targetMediaType": "text/plain"},
+                {"transformerName": "AsposeWordsToPdf"}
+            ],
+            "supportedSourceAndTargetList": [
+                {"sourceMediaType": "text/html", "priority": 45, "targetMediaType": "application/pdf" }
+            ],
+            "transformOptions": [
+                "asposeOptions"
+            ]
+        }
+    ]
+
+}

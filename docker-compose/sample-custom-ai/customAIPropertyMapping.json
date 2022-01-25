@@ -1,0 +1,53 @@
+{
+  "featureToPropertyMapping": [
+    {
+      "aiBusiness": [
+        {
+          "type": "BUSINESS",
+          "aspect": "acme:businesses",
+          "property": "acme:business"
+        }
+      ]
+    },
+    {
+      "aiSport": [
+        {
+          "type": "SPORT",
+          "aspect": "acme:sports",
+          "property": "acme:sport"
+        }
+      ]
+    }
+  ],
+  "categoryToPropertyMapping": [
+    {
+      "aiClassification": {
+        "aspect": "acme:categories",
+        "property": "acme:category"
+      }
+    }
+  ],
+  "keyValueMapping": [
+    {
+      "aiTextract": [
+        {
+          "aspect": "acme:sampleApplicationForSchengenVisa",
+          "property": "acme:diplomaticPassport",
+          "key": "Diplomatic passport"
+        },
+        {
+          "aspect": "acme:sampleApplicationForSchengenVisa",
+          "property": "acme:servicePassport",
+          "key": "Service passport",
+          "confidence": "0.5"
+        },
+        {
+          "aspect": "acme:sampleApplicationForSchengenVisa",
+          "property": "acme:ordinaryPassport",
+          "key": "Ordinary passport",
+          "keyMatch": "EXACT"
+        }
+      ]
+    }
+  ]
+}
