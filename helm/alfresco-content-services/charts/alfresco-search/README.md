@@ -21,8 +21,9 @@ A Helm chart for deploying Alfresco Search
 | Key | Type | Default | Description |
 |-----|------|---------|-------------|
 | alfresco-insight-zeppelin.insightzeppelin.enabled | bool | `false` |  |
-| environment.ALFRESCO_SECURE_COMMS | string | `"none"` |  |
+| environment.ALFRESCO_SECURE_COMMS | string | `"secret"` |  |
 | environment.SOLR_CREATE_ALFRESCO_DEFAULTS | string | `"alfresco,archive"` |  |
+| environment.SOLR_OPTS | string | `" -XX:NewSize=1616m -XX:MaxNewSize=1616m -Dalfresco.secureComms=secret -Dalfresco.secureComms.secret=secret "` |  |
 | global | object | `{"alfrescoRegistryPullSecrets":"quay-registry-secret","strategy":{"rollingUpdate":{"maxSurge":1,"maxUnavailable":0}}}` | Apply your secret file in k8s environment to access quay.io images (Example: https://github.com/Alfresco/alfresco-anaxes-shipyard/blob/master/SECRETS.md) Global definition of Docker registry pull secret which can be overridden from parent ACS Helm chart(s) |
 | ingress.basicAuth | string | `"YWRtaW46JGFwcjEkVVJqb29uS00kSEMuS1EwVkRScFpwSHB2a3JwTDd1Lg=="` | Default solr basic auth user/password: admin / admin You can create your own with htpasswd utilility & encode it with base640. Example: `echo -n "$(htpasswd -nbm admin admin)" | base64` # i.e. admin / admin basicAuth: YWRtaW46JGFwcjEkVVJqb29uS00kSEMuS1EwVkRScFpwSHB2a3JwTDd1Lg== |
 | ingress.enabled | bool | `true` |  |
