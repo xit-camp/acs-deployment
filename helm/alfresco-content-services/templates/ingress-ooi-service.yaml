@@ -1,7 +1,11 @@
 {{- if .Values.ooi.enabled }}
-{{- $serviceName :=  printf "%s-%s" (include "content-services.shortname" .) "ooi-service" -}}
-{{- $servicePort := .Values.ooiService.service.externalPort -}}
-apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
+{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1
+{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
+apiVersion: networking.k8s.io/v1beta1
+{{- else -}}
+apiVersion: extensions/v1beta1
+{{- end }}
 kind: Ingress
 metadata:
   name: {{ template "content-services.shortname" . }}-ooi-service
@@ -34,8 +38,16 @@ spec:
   {{- end }}
       paths:
       - path: {{ .Values.ooiService.ingress.path }}
-        {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+        {{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
         pathType: Prefix
+        backend:
+          service:
+            Name: {{ template "content-services.shortname" . }}-ooi-service
+            port:
+              number: {{ .Values.ooiService.service.externalPort }}
+        {{- else }}
+        backend:
+          serviceName: {{ template "content-services.shortname" . }}-ooi-service
+          servicePort: {{ .Values.ooiService.service.externalPort }}
         {{- end }}
-        backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" $servicePort "context" $) | nindent 10 }}
 {{- end }}
