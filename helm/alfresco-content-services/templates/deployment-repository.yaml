@@ -46,7 +46,11 @@ spec:
           {{- end }}
           envFrom:
           - secretRef:
+              {{- if or .Values.database.existingSecret .Values.postgresql.existingSecret }}
+              name: {{ .Values.database.existingSecret | default .Values.postgresql.existingSecret | quote }}
+              {{- else }}
               name: {{ template "content-services.shortname" . }}-dbsecret
+              {{- end }}
           {{- if .Values.s3connector.enabled }}
           {{- if .Values.s3connector.secrets }}
           - secretRef:

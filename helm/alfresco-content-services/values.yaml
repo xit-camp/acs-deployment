@@ -625,6 +625,8 @@ database:
   password:
   # -- ex: jdbc:postgresql://oldfashioned-mule-postgresql-acs:5432/alfresco
   url:
+  # -- ex: existing secret
+  existingSecret: ""
 
 # -- Defines the properties to be used for the required postgres DB
 # Note: the database (tables) information is also saved in the persistent volume claim
@@ -645,6 +647,8 @@ postgresql:
   postgresqlPassword: alfresco
   # -- Postgresql database name
   postgresqlDatabase: alfresco
+  # -- Existing secret
+  existingSecret: ""
   postgresqlExtendedConf:
     max_connections: 300
     log_min_messages: LOG
