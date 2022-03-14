@@ -56,7 +56,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            Name: {{ template "content-services.shortname" . }}-repository
+            name: {{ template "content-services.shortname" . }}-repository
             port:
               number: {{ .Values.repository.service.externalPort }}
         {{- else }}
