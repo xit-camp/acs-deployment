@@ -17,7 +17,7 @@ data:
   {{ $alfhost := tpl (.Values.externalHost | default (printf "%s-repository" (include "content-services.shortname" .))) $ }}
   {{ $alfprotocol := tpl (.Values.externalProtocol | default "http") $ }}
   {{ $alfport := tpl ((.Values.externalPort | default .Values.repository.service.externalPort) | toString) $ }}
-  ALFRESCO_OPTS: "
+  ALFRESCO_OPTS_SNIPPET: "
       {{ if .Values.repository.licenseSecret -}}
         -Ddir.license.external=/usr/local/tomcat/shared/classes/alfresco/extension/license/
       {{- end }}
@@ -125,8 +125,20 @@ data:
       -Ddsync.service.uris={{ $alfprotocol }}://{{ $alfhost }}:{{ $alfport }}/syncservice
       {{- else }}
       -Devents.subsystem.autoStart=false
-      {{- end }}"
-  CATALINA_OPTS: " $ALFRESCO_OPTS
+      {{- end }}
+      {{- if .Values.repository.aldica.enabled }}
+      -DIGNITE_PERFORMANCE_SUGGESTIONS_DISABLED=true
+      -DIGNITE_QUIET=true
+      -DIGNITE_NO_ASCII=true
+      -DIGNITE_UPDATE_NOTIFIER=false
+      -DIGNITE_JVM_PAUSE_DETECTOR_DISABLED=true
+      -Daldica.core.enabled=true
+      -Daldica.caches.enabled=true
+      -Daldica.caches.remoteSupport.enabled=true
+      -Djava.net.preferIPv4Stack=true
+      {{- end }}
+  "
+  CATALINA_OPTS_SNIPPET: " $ALFRESCO_OPTS_SNIPPET
       -Ddb.driver={{ .Values.database.driver | default "org.postgresql.Driver" }}
       {{- if eq .Values.database.external false }}
       -Ddb.url=jdbc:postgresql://{{ printf "%s-%s" .Release.Name .Values.postgresql.nameOverride }}:{{ .Values.postgresql.service.port }}/{{ .Values.postgresql.postgresDatabase }}
@@ -155,4 +167,5 @@ data:
       {{- end }}
       {{- end }}
       -Dmetadata-keystore.password=$METADATA_KEYSTORE_PASSWORD
-      -Dmetadata-keystore.metadata.password=$METADATA_KEY_PASSWORD"
+      -Dmetadata-keystore.metadata.password=$METADATA_KEY_PASSWORD
+  "

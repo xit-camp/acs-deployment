@@ -27,6 +27,8 @@ repository:
     pullPolicy: IfNotPresent
     internalPort: 8080
     hazelcastPort: 5701
+  aldica:
+    enabled: false
   initContainers:
     db:
       image:
