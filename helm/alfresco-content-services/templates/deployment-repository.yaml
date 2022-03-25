@@ -1,23 +1,16 @@
 # Defines the deployment for the alfresco content repository app
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ template "content-services.shortname" . }}-repository
   labels:
     {{- include "repository.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.repository.replicaCount }}
+  serviceName: {{ template "content-services.shortname" . }}-repository
   selector:
     matchLabels:
       {{- include "repository.selectorLabels" . | nindent 6 }}
-  strategy:
-    {{- if eq .Values.repository.strategy.type "Recreate" }}
-    type: {{ .Values.repository.strategy.type }}
-    {{- else }}
-    type: RollingUpdate
-    rollingUpdate:
-{{ toYaml .Values.global.strategy.rollingUpdate | indent 6 }}
-    {{- end }}
   template:
     metadata:
       annotations:
@@ -71,6 +64,21 @@ spec:
           - configMapRef:
               # config map to use, defined in config-repository.yaml
               name: {{ template "content-services.shortname" . }}-repository-configmap
+          env:
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: CATALINA_OPTS
+              value: '
+                -Daldica.core.local.id=$(MY_POD_NAME)
+                -Daldica.core.public.host=$(MY_POD_IP)
+                $(CATALINA_OPTS_SNIPPET)
+              '
           ports:
             # internal port and the hazelcast port used for clustering
             - containerPort: {{ .Values.repository.image.internalPort }}
@@ -79,6 +87,11 @@ spec:
             - containerPort: {{ .Values.email.server.port }}
             - containerPort: {{ .Values.imap.server.port }}
             - containerPort: {{ .Values.imap.server.imaps.port }}
+            {{- end }}
+            {{- if .Values.repository.aldica.enabled }}
+            - containerPort: 47100
+            - containerPort: 47110
+            - containerPort: 47120
             {{- end }}
           resources:
 {{ toYaml .Values.repository.resources | indent 12 }}
