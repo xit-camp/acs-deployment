@@ -19,8 +19,6 @@ repository:
   edition: Enterprise
   replicaCount: 2
   nodeSelector: {}
-  strategy:
-    type: Recreate
   image:
     repository: quay.io/alfresco/alfresco-content-repository
     tag: 7.2.0
