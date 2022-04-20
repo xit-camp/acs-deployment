@@ -1,11 +1,7 @@
 {{- if .Values.ooi.enabled }}
-{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1
-{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
-apiVersion: extensions/v1beta1
-{{- end }}
+{{- $serviceName :=  printf "%s-%s" (include "content-services.shortname" .) "ooi-service" -}}
+{{- $servicePort := .Values.ooiService.service.externalPort -}}
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "content-services.shortname" . }}-ooi-service
@@ -13,7 +9,6 @@ metadata:
     {{- include "ooi-service.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /ooi-service
 {{- if .Values.ooiService.extraAnnotations }}
 {{ toYaml .Values.ooiService.extraAnnotations | indent 4 }}
 {{- end }}
@@ -38,16 +33,8 @@ spec:
   {{- end }}
       paths:
       - path: {{ .Values.ooiService.ingress.path }}
-        {{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
+        {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
         pathType: Prefix
-        backend:
-          service:
-            name: {{ template "content-services.shortname" . }}-ooi-service
-            port:
-              number: {{ .Values.ooiService.service.externalPort }}
-        {{- else }}
-        backend:
-          serviceName: {{ template "content-services.shortname" . }}-ooi-service
-          servicePort: {{ .Values.ooiService.service.externalPort }}
         {{- end }}
+        backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" $servicePort "context" $) | nindent 10 }}
 {{- end }}

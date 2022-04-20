@@ -1,10 +1,7 @@
-{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1
-{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
-apiVersion: extensions/v1beta1
-{{- end }}
+{{- if .Values.msTeams.enabled }}
+{{- $serviceName :=  printf "%s-%s" (include "content-services.shortname" .) "ms-teams-service" -}}
+{{- $servicePort := .Values.msTeamsService.service.externalPort -}}
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "content-services.shortname" . }}-ms-teams-service
@@ -12,7 +9,6 @@ metadata:
     {{- include "ms-teams-service.labels" . | nindent 4 }}
   annotations:
     kubernetes.io/ingress.class: "nginx"
-    nginx.ingress.kubernetes.io/rewrite-target: /ms-teams-service
 {{- if .Values.msTeamsService.extraAnnotations }}
 {{ toYaml .Values.msTeamsService.extraAnnotations | indent 4 }}
 {{- end }}
@@ -37,15 +33,8 @@ spec:
   {{- end }}
       paths:
       - path: {{ .Values.msTeamsService.ingress.path }}
-        {{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
+        {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
         pathType: Prefix
-        backend:
-          service:
-            name: {{ template "content-services.shortname" . }}-ms-teams-service
-            port:
-              number: {{ .Values.msTeamsService.service.externalPort }}
-        {{- else }}
-        backend:
-          serviceName: {{ template "content-services.shortname" . }}-ms-teams-service
-          servicePort: {{ .Values.msTeamsService.service.externalPort }}
         {{- end }}
+        backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" $servicePort "context" $) | nindent 10 }}
+{{- end }}
