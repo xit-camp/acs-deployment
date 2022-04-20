@@ -1,10 +1,6 @@
-{{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1
-{{- else if semverCompare ">=1.14-0" .Capabilities.KubeVersion.GitVersion -}}
-apiVersion: networking.k8s.io/v1beta1
-{{- else -}}
-apiVersion: extensions/v1beta1
-{{- end }}
+{{- $serviceName :=  printf "%s-%s" (include "content-services.shortname" .) "repository" -}}
+{{- $servicePort := .Values.repository.service.externalPort -}}
+apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
   name: {{ template "content-services.shortname" . }}-repository
@@ -17,18 +13,8 @@ metadata:
     #nginx.ingress.kubernetes.io/session-cookie-hash: "sha1"
     # Default file limit (1m) check, document(s) above this size will throw 413 (Request Entity Too Large) error
     nginx.ingress.kubernetes.io/proxy-body-size: {{ .Values.repository.ingress.maxUploadSize }}
-    nginx.ingress.kubernetes.io/configuration-snippet: |
-    {{- if index .Values "alfresco-search" "enabled" }}
-      location ~ ^(/.*/service/api/solr/.*)$ {return 403;}
-      location ~ ^(/.*/s/api/solr/.*)$ {return 403;}
-      location ~ ^(/.*/wcservice/api/solr/.*)$ {return 403;}
-      location ~ ^(/.*/wcs/api/solr/.*)$ {return 403;}
-    {{- end }}
-      location ~ ^(/.*/s/prometheus)$ {return 403;}
-{{- if .Values.repository.ingress.annotations }}
-{{ toYaml .Values.repository.ingress.annotations | indent 4 }}
-{{- end }}
-
+    {{- include "ingress_annotations" .Values.repository }}
+    {{- include "ingress_vhost_annotations" .Values.repository }}
 spec:
   {{- if .Values.repository.ingress.tls }}
   tls:
@@ -49,28 +35,12 @@ spec:
   {{- end }}
       paths:
       - path: {{ .Values.repository.ingress.path }}
-        {{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
+        {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
         pathType: Prefix
-        backend:
-          service:
-            name: {{ template "content-services.shortname" . }}-repository-headless
-            port:
-              number: {{ .Values.repository.service.externalPort }}
-        {{- else }}
-        backend:
-          serviceName: {{ template "content-services.shortname" . }}-repository-headless
-          servicePort: {{ .Values.repository.service.externalPort }}
         {{- end }}
+        backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" $servicePort "context" $) | nindent 10 }}
       - path: {{ .Values.apiexplorer.ingress.path }}
-        {{- if semverCompare ">=1.21-0" .Capabilities.KubeVersion.GitVersion }}
+        {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
         pathType: Prefix
-        backend:
-          service:
-            name: {{ template "content-services.shortname" . }}-repository-headless
-            port:
-              number: {{ .Values.repository.service.externalPort }}
-        {{- else }}
-        backend:
-          serviceName: {{ template "content-services.shortname" . }}-repository-headless
-          servicePort: {{ .Values.repository.service.externalPort }}
         {{- end }}
+        backend: {{- include "common.ingress.backend" (dict "serviceName" $serviceName "servicePort" $servicePort "context" $) | nindent 10 }}
