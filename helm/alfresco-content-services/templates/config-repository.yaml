@@ -136,6 +136,7 @@ data:
       -Daldica.caches.enabled=true
       -Daldica.caches.remoteSupport.enabled=true
       -Djava.net.preferIPv4Stack=true
+      -Dsample.site.disabled=true
       {{- end }}
   "
   CATALINA_OPTS_SNIPPET: " $ALFRESCO_OPTS_SNIPPET
